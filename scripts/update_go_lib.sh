@@ -52,7 +52,7 @@ update_or_clone_x_lib () {
     if [[ ! -d ${x_path}/$1 ]];then
         # clone net
         cd ${x_path}
-        git clone https://github.com/golang/$1.git
+        git clone https://github.com/golang/$1.git -q
     else
         # update net
         cd ${x_path}/$1
@@ -78,39 +78,53 @@ let index=num%4
 #update_or_clone_x_lib
 
 ## net
-update_or_clone_x_lib net
+update_or_clone_x_lib net &
 
 progress_bar 5
+
+wait
 
 ## tools
-update_or_clone_x_lib tools
+update_or_clone_x_lib tools &
 
 progress_bar 15
 
+wait
+
 ## text
-update_or_clone_x_lib text
+update_or_clone_x_lib text &
 
 progress_bar 5
 
+wait
+
 ## sys
-update_or_clone_x_lib sys
+update_or_clone_x_lib sys &
 
 progress_bar 15
 
+wait
+
 ## lint
-update_or_clone_x_lib lint
+update_or_clone_x_lib lint &
 
 progress_bar 20
+
+wait
 
 ## crypto
-update_or_clone_x_lib crypto
+update_or_clone_x_lib crypto &
 
 progress_bar 20
 
+wait
+
 ## time
-update_or_clone_x_lib "time"
+update_or_clone_x_lib "time" &
 
 progress_bar 10
+
+wait
 
 ### perf
 #update_or_clone_x_lib perf
@@ -119,9 +133,11 @@ progress_bar 10
 #update_or_clone_x_lib review
 
 ## image
-update_or_clone_x_lib image
+update_or_clone_x_lib image &
 
 progress_bar 10
+
+wait
 
 echo "================= finish ================="
 
