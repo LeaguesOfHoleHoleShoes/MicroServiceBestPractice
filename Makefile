@@ -25,6 +25,8 @@ build:
 	@echo "build project"
 	#@./scripts/shell.sh
 
+
+## checkx: check golang.org/x lib, clone or update golang.org/x
 checkx:
-	@echo "build project"
-	#@./scripts/shell.sh
+	@echo "check golang.org/x"
+	@go run ./scripts/update_go_lib.go
