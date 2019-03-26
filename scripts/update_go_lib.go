@@ -16,6 +16,8 @@ const libPath = "go/src/golang.org/x"
 
 var libs = []string{"net", "tools", "text", "sys", "lint", "crypto", "time", "image"}
 
+var status = "Update"
+
 func main() {
 	haveGit()
 	createDir(path.Join(util.HomeDir(), libPath))
@@ -25,10 +27,10 @@ func main() {
 
 	bar.PrependFunc(func(b *uiprogress.Bar) string {
 		if b.Current()/10 == len(libs) {
-			return fmt.Sprintf("Update: %s\n", color.GreenString(fmt.Sprintf("%6s", "Done")))
+			return fmt.Sprintf("%s\n", color.GreenString(fmt.Sprintf("%6s", "Done")))
 		}
 
-		return fmt.Sprintf("Update: %s\n", color.YellowString(fmt.Sprintf("%6s", libs[b.Current()/10])))
+		return fmt.Sprintf("%s: %s\n", status, color.YellowString(fmt.Sprintf("%6s", libs[b.Current()/10])))
 	})
 
 	bar.AppendFunc(func(b *uiprogress.Bar) string {
@@ -45,12 +47,13 @@ func main() {
 			updateLib(lib)
 		}()
 
-		for i := 0; i < 10; i++ {
+		for i := 0; i < 9; i++ {
 			bar.Incr()
 			time.Sleep(100 * time.Millisecond)
 		}
 
 		wg.Wait()
+		bar.Incr()
 	}
 	uiprogress.Stop()
 }
@@ -58,6 +61,7 @@ func main() {
 func updateLib(lib string) {
 	destPath := path.Join(util.HomeDir(), libPath, lib)
 	if !checkDirExists(destPath) {
+		status = "Clone"
 		cmd := exec.Command("git", "clone", fmt.Sprintf("https://github.com/golang/%s.git", lib), destPath)
 		out, err := cmd.CombinedOutput()
 		if err != nil {
@@ -65,6 +69,7 @@ func updateLib(lib string) {
 			os.Exit(2)
 		}
 	} else {
+		status = "Update"
 		cmd := exec.Command("git", "-C", destPath, "pull")
 		out, err := cmd.CombinedOutput()
 		if err != nil {
