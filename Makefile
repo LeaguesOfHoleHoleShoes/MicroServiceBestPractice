@@ -24,3 +24,7 @@ test:
 build:
 	@echo "build project"
 	#@./scripts/shell.sh
+
+checkx:
+	@echo "build project"
+	#@./scripts/shell.sh
