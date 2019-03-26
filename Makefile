@@ -15,6 +15,12 @@ help: Makefile
 	@sed -n 's/^##//p' $< | column -t -s ':' |  sed -e 's/^/ /'
 	@echo
 
+## dev-env-init: check development env and init dev env
+dev-env-init:
+	@echo "check dev env & pre init project "
+	@./scripts/check_dev_env.sh
+	@go run ./scripts/update_go_lib.go
+
 ## test: run prject all unit tests
 test:
 	@echo "run project unit test"
@@ -25,8 +31,7 @@ build:
 	@echo "build project"
 	#@./scripts/shell.sh
 
-
-## checkx: check golang.org/x lib, clone or update golang.org/x
-checkx:
+## update-x: check golang.org/x lib, clone or update golang.org/x
+update-x:
 	@echo "check golang.org/x"
 	@go run ./scripts/update_go_lib.go
